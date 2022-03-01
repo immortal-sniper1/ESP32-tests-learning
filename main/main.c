@@ -5,6 +5,7 @@
 #include "esp_event_loop.h"
 #include "nvs_flash.h"
 #include "driver/gpio.h"
+//#include  <tegweweweweewf.h>
 
 esp_err_t event_handler(void *ctx, system_event_t *event)
 {
@@ -38,5 +39,11 @@ void app_main(void)
         level = !level;
         vTaskDelay(300 / portTICK_PERIOD_MS);
     }
+}
+
+
+void Led_blinky( int ee)
+{
+	f
 }
 
