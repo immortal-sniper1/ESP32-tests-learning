@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "D:/github-stuff/ESP32-tests-learning/platformIO/esp32-s3-test/.pio/build/esp32s3box/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}
