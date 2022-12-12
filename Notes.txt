@@ -1,0 +1,2 @@
+esp_log.h is a debuging log lib
+it has many log lvls and aparenltly it is built in esp IDF
