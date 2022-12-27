@@ -34,7 +34,8 @@ static int led_delay = 500;   // ms
 void toggleLED(void *parameter) 
 {
     
-  while (1) {
+  while (1) 
+  {
     digitalWrite(led_pin, HIGH);
     vTaskDelay(led_delay / portTICK_PERIOD_MS);
     digitalWrite(led_pin, LOW);
@@ -66,7 +67,8 @@ void readSerial(void *parameters)
       c = Serial.read();
 
       // Update delay variable and reset buffer if we get a newline character
-      if (c == '\n') {
+      if (c == '\n') 
+      {
         led_delay = atoi(buf);
         Serial.print("Updated LED delay to: ");
         Serial.println(led_delay);
