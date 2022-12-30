@@ -19,15 +19,16 @@ static hw_timer_t *timer = NULL;
 float My_average;
 
 //circular buffer stuff
-int8_t buffer_length = 20;
+static const int buffer_length = 20;
 int MY_Buffer[buffer_length];
-int idx=0;
-int idx2=0; // index for the averageing task
+int8_t idx = 0;
+int8_t idx2 = 0; // index for the averageing task
 
 
 // task control
 static SemaphoreHandle_t Average_protect;  // protects the agerage while it is written to or read from
 static SemaphoreHandle_t avg_triger;  // protects the agerage while it is written to or read from
+static SemaphoreHandle_t bin_sem = NULL;  // some type of ISR protection 
 
 //////////////////////////////////////////////////////////////////////////
 //tasks
@@ -43,15 +44,21 @@ void IRAM_ATTR ADC_reader_task()
   // Perform action (read from ADC)
   MY_Buffer[idx] = analogRead(adc_pin);
   idx++;
-  if(idx >= buffer_length)
+  if (idx >= buffer_length)
   {
-    idx=0;
+    idx = 0;
   }
 
   //notify other task that there are 10 values to average out
-  if(idx==0 || idx==10)
+  if (idx == 0)
   {
-      xSemaphoreGive(avg_triger);
+    idx2 = 0;
+    xSemaphoreGive(avg_triger);
+  }
+  if (idx == 10)
+  {
+    idx2 = 10;
+    xSemaphoreGive(avg_triger);
   }
 
   // Give semaphore to tell task that new value is ready
@@ -72,15 +79,25 @@ void IRAM_ATTR ADC_reader_task()
 
 void Averager(void *parameters)
 {
-   int sum =0;
-  for( int i=0; i<10; i++)
+  int sum = 0;
+  if (xSemaphoreTake(avg_triger, 0) == pdTRUE)
   {
-    sum=sum+MY_Buffer[i+idx2];
+    for ( int i = 0; i < 10; i++)
+    {
+      sum = sum + MY_Buffer[i + idx2];
+    }
+    if (xSemaphoreTake(Average_protect, 0) == pdTRUE)
+    {
+      My_average = sum / 10;
+      //end protection
+      xSemaphoreGive(Average_protect);
+    }
+    //end protection
+    xSemaphoreGive(avg_triger);
   }
 
 
-  My_average=sum/10;
-  
+
 }
 
 
@@ -89,11 +106,13 @@ void Averager(void *parameters)
 void printValues(void *parameters)
 {
   char My_txt;
+  char t1='avg';
+  char *t2="AVG";
   // Loop forever, wait for semaphore, and print value
   while (1)
   {
-    My_txt = serial.read();
-    if (My_txt == "avg" || My_txt == "AVG")
+    My_txt = Serial.read();
+    if (  (strcmp(My_txt, t1) == 0) || (strcmp(My_txt, t2) == 0) )
     {
       Serial.print("The average is: ");
       //protect global variable here
@@ -101,7 +120,7 @@ void printValues(void *parameters)
       {
         Serial.print(My_average);
         //end protection
-        xSemaphoreGive(mutex);
+        xSemaphoreGive(Average_protect);
       }
 
     }
@@ -128,7 +147,7 @@ void setup()
   Serial.println();
   Serial.println("---FreeRTOS ISR Buffer chalendhe my solution---");
 
-    // Create mutex before starting tasks
+  // Create mutex before starting tasks
   My_average = xSemaphoreCreateMutex();
   avg_triger = xSemaphoreCreateMutex();
 
