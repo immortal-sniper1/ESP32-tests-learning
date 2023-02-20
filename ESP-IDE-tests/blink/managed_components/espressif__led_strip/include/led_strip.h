@@ -7,15 +7,11 @@
 
 #include <stdint.h>
 #include "esp_err.h"
+#include "led_strip_rmt.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @brief LED strip handle
- */
-typedef struct led_strip_t *led_strip_handle_t;
 
 /**
  * @brief Set RGB for a specific pixel
@@ -32,6 +28,26 @@ typedef struct led_strip_t *led_strip_handle_t;
  *      - ESP_FAIL: Set RGB for a specific pixel failed because other error occurred
  */
 esp_err_t led_strip_set_pixel(led_strip_handle_t strip, uint32_t index, uint32_t red, uint32_t green, uint32_t blue);
+
+/**
+ * @brief Set RGBW for a specific pixel
+ *
+ * @note Only call this function if your led strip does have the white component (e.g. SK6812-RGBW)
+ * @note Also see `led_strip_set_pixel` if you only want to specify the RGB part of the color and bypass the white component
+ *
+ * @param strip: LED strip
+ * @param index: index of pixel to set
+ * @param red: red part of color
+ * @param green: green part of color
+ * @param blue: blue part of color
+ * @param white: separate white component
+ *
+ * @return
+ *      - ESP_OK: Set RGBW color for a specific pixel successfully
+ *      - ESP_ERR_INVALID_ARG: Set RGBW color for a specific pixel failed because of an invalid argument
+ *      - ESP_FAIL: Set RGBW color for a specific pixel failed because other error occurred
+ */
+esp_err_t led_strip_set_pixel_rgbw(led_strip_handle_t strip, uint32_t index, uint32_t red, uint32_t green, uint32_t blue, uint32_t white);
 
 /**
  * @brief Refresh memory colors to LEDs
@@ -68,35 +84,6 @@ esp_err_t led_strip_clear(led_strip_handle_t strip);
  *      - ESP_FAIL: Free resources failed because error occurred
  */
 esp_err_t led_strip_del(led_strip_handle_t strip);
-
-/**
- * @brief LED Strip Configuration
- */
-typedef struct {
-    uint32_t strip_gpio_num; /*!< GPIO number that used by LED strip */
-    uint32_t max_leds;       /*!< Maximum LEDs in a single strip */
-} led_strip_config_t;
-
-/**
- * @brief LED Strip RMT specific configuration
- */
-typedef struct {
-    uint32_t resolution_hz; /*!< RMT tick resolution, if set to zero, a default resolution (10MHz) will be applied */
-} led_strip_rmt_config_t;
-
-/**
- * @brief Create LED strip based on RMT TX channel
- *
- * @param led_config LED strip configuration
- * @param rmt_config RMT specific configuration
- * @param ret_strip Returned LED strip handle
- * @return
- *      - ESP_OK: create LED strip handle successfully
- *      - ESP_ERR_INVALID_ARG: create LED strip handle failed because of invalid argument
- *      - ESP_ERR_NO_MEM: create LED strip handle failed because of out of memory
- *      - ESP_FAIL: create LED strip handle failed because some other error
- */
-esp_err_t led_strip_new_rmt_device(const led_strip_config_t *led_config, const led_strip_rmt_config_t *rmt_config, led_strip_handle_t *ret_strip);
 
 #ifdef __cplusplus
 }

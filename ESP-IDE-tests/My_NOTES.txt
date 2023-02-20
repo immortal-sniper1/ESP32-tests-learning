@@ -1,0 +1,2 @@
+In order to fix the problems with ninja
+I need to run install.bat and comp.bat
